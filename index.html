@@ -1,0 +1,1212 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Выгодный отпуск 2027</title>
+<meta name="description" content="Подбирает даты отпуска на 2027 год по производственному календарю, чтобы отдыхать дольше: праздники не входят в отпуск, части примыкают к выходным. Учитывает правило 14 дней, закреплённые даты и праздники региона.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Как взять отпуск в 2027 году, чтобы отдыхать дольше">
+<meta property="og:description" content="План отпуска по производственному календарю 2027 года: когда и на сколько дней брать части, чтобы получить больше дней отдыха. Работает в браузере, данные никуда не отправляются.">
+<meta property="og:image" content="https://kireev-duty.github.io/vygodnyy-otpusk/docs/screenshot.png">
+<style>
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #f0f2f5;
+  --text: #16181d;
+  --muted: #5d6470;
+  --border: #dde1e7;
+  --accent: #2557d6;
+  --accent-soft: #e2eafc;
+  --on-accent: #ffffff;
+  --pin: #12318a;
+  --good: #137a4b;
+  --good-soft: #e3f4ec;
+  --warn-soft: #fdf1dc;
+  --bad: #b3261e;
+  --hatch: rgba(179, 38, 30, 0.3);
+  --radius: 12px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111317;
+    --surface: #1a1d23;
+    --surface-2: #232730;
+    --text: #e8eaee;
+    --muted: #9aa1ad;
+    --border: #2f3440;
+    --accent: #7ea2ff;
+    --accent-soft: #23304f;
+    --on-accent: #0f1524;
+    --pin: #c6d5ff;
+    --good: #5fd09a;
+    --good-soft: #15302a;
+    --warn-soft: #362a14;
+    --bad: #ff8a80;
+    --hatch: rgba(255, 138, 128, 0.35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111317;
+  --surface: #1a1d23;
+  --surface-2: #232730;
+  --text: #e8eaee;
+  --muted: #9aa1ad;
+  --border: #2f3440;
+  --accent: #7ea2ff;
+  --accent-soft: #23304f;
+  --on-accent: #0f1524;
+  --pin: #c6d5ff;
+  --good: #5fd09a;
+  --good-soft: #15302a;
+  --warn-soft: #362a14;
+  --bad: #ff8a80;
+  --hatch: rgba(255, 138, 128, 0.35);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+a { color: var(--accent); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 16px; }
+header.top { padding: 28px 0 8px; }
+h1 { font-size: clamp(22px, 3.2vw, 30px); line-height: 1.2; margin: 0 0 8px; letter-spacing: -0.01em; }
+.lead { margin: 0 0 14px; color: var(--muted); max-width: 820px; }
+.notice { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 14px; margin: 0 0 14px; max-width: 820px; font-size: 14px; }
+.presets { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 16px; }
+.presets span { color: var(--muted); font-size: 14px; }
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  padding: 7px 12px;
+  border-radius: 999px;
+}
+button:hover { border-color: var(--accent); }
+button:disabled { cursor: default; color: var(--muted); border-color: var(--border); }
+.layout {
+  display: grid;
+  grid-template-columns: minmax(290px, 380px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  padding-bottom: 32px;
+}
+@media (max-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+form.panel { position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow: auto; }
+@media (max-width: 900px) { form.panel { position: static; max-height: none; } }
+fieldset { border: 0; padding: 0; margin: 0 0 20px; min-width: 0; }
+fieldset:last-child { margin-bottom: 0; }
+legend { font-weight: 650; font-size: 16px; margin-bottom: 8px; padding: 0; }
+legend .opt { font-weight: 400; font-size: 13px; color: var(--muted); margin-left: 6px; }
+.field { display: block; margin-bottom: 12px; }
+.lbl { display: block; font-size: 14px; font-weight: 550; margin-bottom: 4px; }
+.help { display: block; color: var(--muted); font-size: 12.5px; margin-top: 3px; }
+p.help { margin: 0; }
+input[type="text"], input[type="date"], select {
+  width: 100%;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 9px;
+  min-width: 0;
+}
+input[type="date"] { padding: 6px 7px; font-size: 14px; }
+input[type="text"]:focus, input[type="date"]:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+input[type="checkbox"] { accent-color: var(--accent); width: 16px; height: 16px; margin: 3px 0 0; flex: none; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.chk { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; margin: 4px 0 12px; cursor: pointer; }
+.chk .help { margin-top: 1px; }
+.seg { display: flex; gap: 0; border: 1px solid var(--border); border-radius: 999px; padding: 3px; background: var(--surface-2); }
+.seg button { flex: 1; border: 0; background: transparent; padding: 5px 10px; font-size: 14px; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--surface); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14); font-weight: 600; }
+.item { position: relative; background: var(--surface-2); border-radius: 10px; padding: 8px 40px 8px 8px; margin-bottom: 6px; }
+.item input[type="date"] { background: var(--surface); }
+.item .note { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+.x { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; padding: 0; line-height: 1; font-size: 16px; color: var(--muted); }
+.add { font-size: 14px; padding: 5px 12px; color: var(--accent); margin-bottom: 4px; }
+.results { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; min-width: 0; }
+.verdict { border-radius: var(--radius); padding: 18px; background: var(--good-soft); }
+.verdict.neutral { background: var(--surface-2); }
+.verdict.bad { background: var(--warn-soft); }
+.verdict h2 { margin: 0 0 6px; font-size: clamp(20px, 2.6vw, 26px); line-height: 1.25; }
+.verdict p { margin: 0 0 4px; }
+.verdict p:last-child { margin: 0; }
+.box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; min-width: 0; }
+.box h3 { margin: 0 0 8px; font-size: 16px; }
+.box p { margin: 0 0 6px; }
+.box p:last-child { margin-bottom: 0; }
+.box-h { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.box-h h3 { margin: 0; }
+.small { font-size: 12.5px; color: var(--muted); }
+ul.warns { margin: 0 0 10px; padding: 0; list-style: none; display: grid; gap: 8px; }
+ul.warns li { padding: 10px 12px; border-radius: 8px; background: var(--warn-soft); font-size: 14px; }
+.part { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 4px 12px; align-items: start; padding: 10px 0; border-top: 1px solid var(--border); }
+.part:first-of-type { border-top: 0; padding-top: 2px; }
+.pn { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--on-accent); font-weight: 650; font-size: 13px; display: grid; place-items: center; }
+.part.pinned .pn { background: var(--pin); }
+.pt { font-size: 15px; }
+.pt b { font-size: 16px; margin-right: 4px; }
+.tag { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; background: var(--surface-2); color: var(--muted); margin: 2px 4px 2px 0; white-space: nowrap; }
+.tag.acc { background: var(--accent-soft); color: var(--text); }
+.pinb { font-size: 13px; padding: 4px 10px; }
+@media (max-width: 520px) {
+  .part { grid-template-columns: 28px minmax(0, 1fr); }
+  .pinb { grid-column: 2; justify-self: start; }
+}
+.months { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px 20px; }
+.month h4 { margin: 0 0 4px; font-size: 14px; display: flex; justify-content: space-between; align-items: baseline; }
+.month h4 small { color: var(--muted); font-weight: 400; font-size: 12px; }
+.mgrid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; }
+.mgrid .wd { font-size: 11px; color: var(--muted); text-align: center; line-height: 18px; }
+.d {
+  position: relative;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.d:hover { box-shadow: inset 0 0 0 1px var(--accent); }
+.d.o { color: var(--muted); }
+.d.h { color: var(--bad); font-weight: 700; }
+.d.mv::after { content: ""; position: absolute; left: 50%; bottom: 3px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: currentColor; }
+.d.ws { box-shadow: inset 0 0 0 1px var(--muted); }
+.d.rest { background: var(--accent-soft); }
+.d.vac { background: var(--accent); color: var(--on-accent); font-weight: 600; }
+.d.vac.pin { background: var(--pin); }
+.d.blk { background-image: repeating-linear-gradient(135deg, transparent 0 4px, var(--hatch) 4px 7px); }
+.d.out { opacity: 0.35; }
+.d.anc { outline: 2px solid var(--text); outline-offset: -2px; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; color: var(--muted); margin: 6px 0 12px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend .d { display: inline-grid; place-items: center; width: 22px; height: 20px; font-size: 11px; border-radius: 4px; }
+.runs { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.run { background: var(--surface-2); border-radius: 10px; padding: 10px 12px; }
+.run-h { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; margin-bottom: 4px; }
+.run-h span { font-size: 12.5px; color: var(--muted); text-align: right; }
+.opt { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 6px 0; border-top: 1px dashed var(--border); font-size: 14px; }
+.opt:first-of-type { border-top: 0; }
+.opt button { font-size: 13px; padding: 4px 10px; flex: none; }
+table.money { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 8px; }
+table.money td { padding: 6px 0; border-bottom: 1px solid var(--border); }
+table.money td:last-child { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; padding-left: 12px; }
+table.money tr.sum td { font-weight: 650; border-bottom: 0; }
+ul.rules { margin: 0; padding-left: 18px; font-size: 14px; display: grid; gap: 6px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.toast { color: var(--good); font-size: 13px; align-self: center; }
+footer { border-top: 1px solid var(--border); padding: 16px 0 32px; color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; align-items: center; }
+footer p { margin: 0; }
+footer .theme button { padding: 4px 10px; font-size: 13px; }
+@media print {
+  body { background: #fff; color: #000; font-size: 12px; }
+  .presets, .actions, .notice, form.panel, footer .theme, .cal-tools, .hint, .pinb, .opt button { display: none !important; }
+  .layout { display: block; }
+  .box, .verdict { border: 1px solid #bbb; break-inside: avoid; margin-bottom: 10px; }
+  .d { height: 20px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Как взять отпуск в 2027 году, чтобы отдыхать дольше</h1>
+    <p class="lead">Праздники не входят в отпуск и продлевают его, а части отпуска можно поставить так, чтобы к ним примыкали выходные. Калькулятор подбирает даты по производственному календарю 2027 года: сколько частей, когда и на сколько дней, чтобы дней отдыха вышло как можно больше. Расчёт идёт в браузере, данные никуда не отправляются.</p>
+    <p class="notice">Календарь 2027 года утверждён постановлением Правительства от 17.09.2026 № 1187. График отпусков на 2027 год работодатель утверждает не позднее 17 декабря 2026 года — пожелания лучше передать до этого.</p>
+    <div class="presets"><span>Примеры:</span>
+      <button type="button" data-preset="best">Максимум отдыха</button>
+      <button type="button" data-preset="summer">14 дней летом</button>
+      <button type="button" data-preset="strict">Части с выходными</button>
+      <button type="button" data-preset="north">Крайний Север, 52 дня</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <form id="form" class="panel" autocomplete="off" onsubmit="return false"></form>
+    <section id="results" class="results"></section>
+  </main>
+  <p id="live" class="sr" aria-live="polite"></p>
+
+  <footer>
+    <p>Ориентировочный расчёт, не юридическая консультация. Правила и календарь на октябрь 2026 года.</p>
+    <p class="theme">Тема: <button type="button" data-theme-set="">системная</button> <button type="button" data-theme-set="light">светлая</button> <button type="button" data-theme-set="dark">тёмная</button></p>
+  </footer>
+</div>
+
+<script id="core">
+(function (root) {
+  'use strict';
+
+  var DAY = 86400000;
+
+  // Нерабочие праздничные дни (ст. 112 ТК РФ). В число дней отпуска не входят (ст. 120 ТК РФ)
+  var HOLIDAYS = ['01-01', '01-02', '01-03', '01-04', '01-05', '01-06', '01-07', '01-08', '02-23', '03-08', '05-01', '05-09', '06-12', '11-04'];
+
+  // Переносы выходных: off — будни, ставшие выходными (в отпуск входят как обычные выходные),
+  // work — субботы и воскресенья, ставшие рабочими. Для года без записи переносы неизвестны
+  var CAL = {
+    2026: { off: ['01-09', '03-09', '05-11', '12-31'], work: [], act: 'постановление Правительства РФ от 24.09.2025 № 1466' },
+    2027: { off: ['02-22', '05-03', '05-10', '06-14', '11-05', '12-31'], work: ['02-20'], act: 'постановление Правительства РФ от 17.09.2026 № 1187' }
+  };
+
+  var MAX_DAYS = 90, MAX_PARTS = 8, LONG = 14;
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function day(y, m, d) { return Math.round(Date.UTC(y, m - 1, d) / DAY); }
+  function date(n) {
+    var t = new Date(n * DAY);
+    return { y: t.getUTCFullYear(), m: t.getUTCMonth() + 1, d: t.getUTCDate(), wd: (t.getUTCDay() + 6) % 7 };
+  }
+  function iso(n) { var t = date(n); return t.y + '-' + pad(t.m) + '-' + pad(t.d); }
+  function parse(s) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || ''));
+    if (!m) return NaN;
+    var n = day(+m[1], +m[2], +m[3]);
+    return iso(n) === m[0] ? n : NaN;
+  }
+  function known(y) { return Object.prototype.hasOwnProperty.call(CAL, y); }
+
+  // 'H' — нерабочий праздник, 'O' — выходной, 'W' — рабочий день
+  function kind(n, regional) {
+    var t = date(n), md = pad(t.m) + '-' + pad(t.d), c = CAL[t.y];
+    if (HOLIDAYS.indexOf(md) >= 0 || (regional && regional[n])) return 'H';
+    if (c && c.work.indexOf(md) >= 0) return 'W';
+    if (c && c.off.indexOf(md) >= 0) return 'O';
+    return t.wd >= 5 ? 'O' : 'W';
+  }
+  // Пометка для календаря: 'moved' — перенесённый выходной, 'work' — рабочая суббота
+  function mark(n) {
+    var t = date(n), md = pad(t.m) + '-' + pad(t.d), c = CAL[t.y];
+    if (!c || HOLIDAYS.indexOf(md) >= 0) return '';
+    if (c.work.indexOf(md) >= 0) return 'work';
+    if (c.off.indexOf(md) >= 0) return 'moved';
+    return '';
+  }
+
+  function context(inp) {
+    var y = inp.year || 2027, from = parse(inp.from), to = parse(inp.to), reg = {}, blocked = {}, memo = {};
+    if (from !== from) from = day(y, 1, 1);
+    if (to !== to) to = day(y, 12, 31);
+    (inp.regional || []).forEach(function (s) { var n = parse(s); if (n === n) reg[n] = true; });
+    (inp.blocked || []).forEach(function (r) {
+      var a = parse(r.from), b = parse(r.to || r.from);
+      for (var n = a; n <= b && b - a < 800; n++) blocked[n] = true;
+    });
+    return {
+      from: from, to: to, regional: reg,
+      t: function (n) { return memo[n] || (memo[n] = kind(n, reg)); },
+      blocked: function (n) { return !!blocked[n]; }
+    };
+  }
+
+  function monthStats(y, regional) {
+    var out = [];
+    for (var m = 1; m <= 12; m++) {
+      var a = day(y, m, 1), b = day(y, m + 1, 1) - 1, w = 0;
+      for (var n = a; n <= b; n++) if (kind(n, regional) === 'W') w++;
+      out.push({ days: b - a + 1, work: w, off: b - a + 1 - w });
+    }
+    return out;
+  }
+
+  // Сколько дней отпуска в периоде: праздники не считаются, выходные считаются
+  function count(ctx, s, e) {
+    var c = 0;
+    for (var n = s; n <= e; n++) if (ctx.t(n) !== 'H') c++;
+    return c;
+  }
+
+  // Непрерывный отдых вокруг одной части: вместе с примыкающими выходными и праздниками
+  function span(ctx, s, e) {
+    var a = s, b = e;
+    while (ctx.t(a - 1) !== 'W') a--;
+    while (ctx.t(b + 1) !== 'W') b++;
+    return { from: a, to: b, len: b - a + 1 };
+  }
+
+  // Отдых по всему плану: нерабочие блоки, в которые попал хотя бы один день отпуска
+  function evaluate(ctx, parts) {
+    var vac = {}, blocks = [];
+    parts.forEach(function (p) { for (var n = p.from; n <= p.to; n++) vac[n] = true; });
+    var off = function (n) { return vac[n] || ctx.t(n) !== 'W'; };
+    parts.slice().sort(function (a, b) { return a.from - b.from; }).forEach(function (p) {
+      var a = p.from, b = p.to;
+      while (off(a - 1)) a--;
+      while (off(b + 1)) b++;
+      var last = blocks[blocks.length - 1];
+      if (!last || last.from !== a) blocks.push({ from: a, to: b, len: b - a + 1 });
+    });
+    return { rest: blocks.reduce(function (s, b) { return s + b.len; }, 0), blocks: blocks };
+  }
+
+  // Часть «с выходными»: сразу после неё (не считая праздников) — рабочий день
+  function tailFree(ctx, n) {
+    var j = n + 1;
+    while (ctx.t(j) === 'H') j++;
+    return ctx.t(j) === 'W' || j > ctx.to;
+  }
+
+  function pinsOf(inp, ctx) {
+    var list = (inp.pinned || []).map(function (p) {
+      var a = parse(p.from), b = parse(p.to || p.from);
+      return a <= b ? { from: a, to: b } : { from: b, to: a };
+    }).filter(function (p) { return p.from === p.from && p.to === p.to; })
+      .sort(function (a, b) { return a.from - b.from; });
+    for (var i = 0; i < list.length; i++) {
+      var p = list[i];
+      if (p.from < ctx.from || p.to > ctx.to) return { error: 'pinOut', at: p };
+      if (i && p.from - list[i - 1].to < 2) return { error: 'pinTouch', at: p };
+      p.days = count(ctx, p.from, p.to);
+      if (!p.days) return { error: 'pinEmpty', at: p };
+    }
+    return { list: list };
+  }
+
+  function cmp(a, b) {
+    for (var i = 0; i < a.length; i++) if (a[i] !== b[i]) return a[i] > b[i] ? 1 : -1;
+    return 0;
+  }
+
+  // Лучший план: динамика по дням периода.
+  // Состояние: фаза (вне части с «хвостом» выходных после прошлой части / вне части без хвоста /
+  // часть только что закончилась / внутри части с длиной l и признаком «началась в окне»),
+  // число законченных частей k, есть ли уже часть 14+ (h), потрачено дней v.
+  // Значение — дни отдыха, уже учтённые; дни перед частью добавляются в момент её начала.
+  function optimize(inp) {
+    var ctx = context(inp), F = ctx.from, T = ctx.to;
+    var N = Math.max(0, Math.min(MAX_DAYS, Math.floor(+inp.days || 0)));
+    var K = Math.max(1, Math.min(MAX_PARTS, Math.floor(+inp.maxParts || 1)));
+    if (!(T >= F)) return { ok: false, reason: 'range' };
+    var pp = pinsOf(inp, ctx);
+    if (pp.error) return { ok: false, reason: pp.error, pin: pp.at };
+    var pins = pp.list, pinDays = 0;
+    pins.forEach(function (p) { pinDays += p.days; });
+    if (pinDays > N) return { ok: false, reason: 'pinDays', pinDays: pinDays, need: N };
+    if (pins.length > K) return { ok: false, reason: 'pinParts', pins: pins.length, maxParts: K };
+
+    var need14 = !!inp.rule14 && N >= LONG;
+    var wFrom = -Infinity, wTo = Infinity;
+    if (need14 && inp.window) {
+      var wa = parse(inp.window.from), wb = parse(inp.window.to);
+      if (wa === wa) wFrom = wa;
+      if (wb === wb) wTo = wb;
+    }
+    var L = T - F + 1, cap = need14 ? LONG : 1, SO = need14 && inp.window ? 2 : 1;
+    var tp = new Uint8Array(L), pre = new Int16Array(L), endOK = new Uint8Array(L), blk = new Uint8Array(L), pinAt = new Int16Array(L);
+    var d, n, j;
+    for (d = 0; d < L; d++) {
+      n = F + d;
+      var t = ctx.t(n);
+      tp[d] = t === 'W' ? 0 : t === 'O' ? 1 : 2;
+      for (j = n - 1; ctx.t(j) !== 'W'; j--) pre[d]++;
+      endOK[d] = t !== 'H' && (!inp.strict || tailFree(ctx, n)) ? 1 : 0;
+      blk[d] = ctx.blocked(n) ? 1 : 0;
+      pinAt[d] = -1;
+    }
+    pins.forEach(function (p, i) { for (var x = p.from; x <= p.to; x++) pinAt[x - F] = i; });
+    var after = 0;
+    for (j = T + 1; ctx.t(j) !== 'W'; j++) after++;
+
+    var P = 3 + SO * (cap + 1), K1 = K + 1, N1 = N + 1, KH = K1 * 2 * N1, S = P * KH;
+    var cur = new Int32Array(S).fill(-1), nxt = new Int32Array(S), back = new Uint8Array(L * S), base = 0;
+    var ip = function (l, so) { return 3 + l * SO + (SO === 2 ? so : 0); };
+    var put = function (ph, k, h, v, sc, code) {
+      var i = ((ph * K1 + k) * 2 + h) * N1 + v;
+      if (sc > nxt[i]) { nxt[i] = sc; back[base + i] = code; }
+    };
+    cur[(1 * K1 * 2) * N1] = 0;
+
+    for (d = 0; d < L; d++) {
+      nxt.fill(-1);
+      base = d * S;
+      n = F + d;
+      var isW = tp[d] === 0, c = tp[d] === 2 ? 0 : 1, pj = pinAt[d];
+      var pStart = pj >= 0 && pins[pj].from === n, pEnd = pj >= 0 && pins[pj].to === n;
+      var canStart = pj >= 0 ? pStart : isW && !blk[d];
+      var canGo = pj >= 0 ? !pStart : !blk[d];
+      var inWin = n >= wFrom ? 1 : 0;
+      var ph, k, h, v, row, sc, l, so;
+      for (ph = 0; ph < P; ph++) {
+        l = ph >= 3 ? Math.floor((ph - 3) / SO) : 0;
+        so = ph >= 3 ? (SO === 2 ? (ph - 3) % 2 : 1) : 0;
+        for (k = 0; k < K1; k++) for (h = 0; h < 2; h++) {
+          row = ((ph * K1 + k) * 2 + h) * N1;
+          for (v = 0; v < N1; v++) {
+            sc = cur[row + v];
+            if (sc < 0) continue;
+            if (ph < 3) {
+              if (pj < 0) {
+                var tail = ph !== 1 && !isW;
+                put(tail ? 0 : 1, k, h, v, sc + (tail ? 1 : 0), ph);
+              }
+              if (ph !== 2 && canStart && k < K && v + c <= N) put(ip(Math.min(cap, c), inWin), k, h, v + c, sc + 1 + (ph === 1 ? pre[d] : 0), ph);
+            } else if (canGo && v + c <= N) {
+              put(ip(Math.min(cap, l + c), so), k, h, v + c, sc + 1, ph);
+            }
+          }
+        }
+      }
+      if (pj >= 0 ? pEnd : endOK[d]) {
+        for (ph = 3; ph < P; ph++) {
+          l = Math.floor((ph - 3) / SO);
+          so = SO === 2 ? (ph - 3) % 2 : 1;
+          var isLong = need14 && l >= LONG && so && n <= wTo ? 1 : 0;
+          for (k = 0; k < K; k++) for (h = 0; h < 2; h++) {
+            row = ((ph * K1 + k) * 2 + h) * N1;
+            for (v = 0; v < N1; v++) {
+              sc = nxt[row + v];
+              if (sc >= 0) put(2, k + 1, h | isLong, v, sc, ph | (h << 6));
+            }
+          }
+        }
+      }
+      if (pEnd) nxt.fill(-1, 3 * KH, S);
+      var tmp = cur; cur = nxt; nxt = tmp;
+    }
+
+    var bestKey = null, bestI = -1;
+    for (var i = 0; i < 3 * KH; i++) {
+      if (cur[i] < 0) continue;
+      var ph0 = Math.floor(i / KH), r0 = i % KH;
+      var key = [need14 ? Math.floor(r0 / N1) % 2 : 1, r0 % N1, cur[i] + (ph0 !== 1 ? after : 0), -Math.floor(r0 / (2 * N1))];
+      if (!bestKey || cmp(key, bestKey) > 0) { bestKey = key; bestI = i; }
+    }
+    if (bestI < 0) return { ok: false, reason: 'none' };
+
+    var found = [], idx = bestI, end = -1;
+    d = L - 1;
+    while (d >= 0) {
+      var phd = Math.floor(idx / KH), rem = idx % KH;
+      var kk = Math.floor(rem / (2 * N1)), hh = Math.floor(rem / N1) % 2, vv = rem % N1;
+      var code = back[d * S + idx], prev = code & 63;
+      if (phd === 2) {
+        end = F + d;
+        idx = ((prev * K1 + kk - 1) * 2 + (code >> 6)) * N1 + vv;
+        continue;
+      }
+      if (phd >= 3) {
+        if (prev < 3) found.push({ from: F + d, to: end });
+        vv -= tp[d] === 2 ? 0 : 1;
+      }
+      idx = ((prev * K1 + kk) * 2 + hh) * N1 + vv;
+      d--;
+    }
+    found.reverse();
+
+    var ev = evaluate(ctx, found);
+    var parts = found.map(function (p) {
+      var o = { from: p.from, to: p.to, days: 0, holidays: 0, work: 0, weekends: 0, pinned: pinAt[p.from - F] >= 0 };
+      for (var x = p.from; x <= p.to; x++) {
+        var t = ctx.t(x);
+        if (t === 'H') o.holidays++; else o.days++;
+        if (t === 'W') o.work++;
+        if (t === 'O') o.weekends++;
+      }
+      o.long = o.days >= LONG && p.from >= wFrom && p.to <= wTo;
+      o.rest = ev.blocks.filter(function (b) { return b.from <= p.from && b.to >= p.to; })[0];
+      return o;
+    });
+    return {
+      ok: true, parts: parts, blocks: ev.blocks, rest: ev.rest, score: bestKey[2],
+      used: bestKey[1], need: N, need14: need14, no14: need14 && !bestKey[0], pinDays: pinDays
+    };
+  }
+
+  // Длинные выходные и рабочие недели до и после них
+  function bridges(inp) {
+    var ctx = context(inp), F = ctx.from, T = ctx.to, out = [], seen = {};
+    function option(run, s, e, side) {
+      for (var x = s; x <= e; x++) if (ctx.blocked(x)) return;
+      var key = s + ':' + e;
+      if (seen[key]) { seen[key].side = 'bridge'; return; }
+      var days = count(ctx, s, e), sp = span(ctx, s, e);
+      if (sp.len - days < 5) return;
+      seen[key] = { from: s, to: e, days: days, side: side, rest: sp, gain: sp.len - days };
+      run.options.push(seen[key]);
+    }
+    for (var n = F; n <= T; n++) {
+      if (ctx.t(n) === 'W') continue;
+      var a = n, b = n;
+      while (ctx.t(a - 1) !== 'W') a--;
+      while (ctx.t(b + 1) !== 'W') b++;
+      n = b;
+      if (b - a + 1 < 3) continue;
+      var run = { from: a, to: b, len: b - a + 1, options: [] }, s, e;
+      e = a - 1;
+      if (e >= F && e <= T) {
+        for (s = e; s - 1 >= F && ctx.t(s - 1) === 'W'; s--);
+        option(run, s, e, 'before');
+      }
+      s = b + 1;
+      if (s >= F && s <= T) {
+        for (e = s; e + 1 <= T && ctx.t(e + 1) === 'W'; e++);
+        option(run, s, e, 'after');
+      }
+      out.push(run);
+    }
+    return out;
+  }
+
+  // Отпускные при стабильном окладе и зарплата, которую не начислят за рабочие дни отпуска
+  function money(inp, parts, salary) {
+    var ctx = context(inp), avg = salary / 29.3, pay = 0, lost = 0, wd = {};
+    parts.forEach(function (p) {
+      for (var n = p.from; n <= p.to; n++) {
+        var t = ctx.t(n);
+        if (t !== 'H') pay += avg;
+        if (t !== 'W') continue;
+        var dt = date(n), key = dt.y * 100 + dt.m;
+        if (!wd[key]) {
+          var w = 0;
+          for (var x = day(dt.y, dt.m, 1); x < day(dt.y, dt.m + 1, 1); x++) if (ctx.t(x) === 'W') w++;
+          wd[key] = w;
+        }
+        lost += salary / wd[key];
+      }
+    });
+    return { avg: avg, pay: pay, lost: lost, diff: pay - lost };
+  }
+
+  root.VacCore = {
+    HOLIDAYS: HOLIDAYS, CAL: CAL, MAX_DAYS: MAX_DAYS, MAX_PARTS: MAX_PARTS,
+    day: day, date: date, iso: iso, parse: parse, known: known, kind: kind, mark: mark,
+    context: context, monthStats: monthStats, count: count, span: span, evaluate: evaluate,
+    optimize: optimize, bridges: bridges, money: money
+  };
+})(this);
+</script>
+
+<script>
+(function () {
+  'use strict';
+
+  var C = window.VacCore;
+  var Y = 2027, STORE_KEY = 'vygodnyy-otpusk';
+  var MON = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+  var MONTH = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+  var WD = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
+  var HOLIDAY_NAME = {
+    '02-23': 'День защитника Отечества', '03-08': 'Международный женский день', '05-01': 'Праздник Весны и Труда',
+    '05-09': 'День Победы', '06-12': 'День России', '11-04': 'День народного единства'
+  };
+  var form = document.getElementById('form'), resultsEl = document.getElementById('results');
+  var nf = new Intl.NumberFormat('ru-RU');
+  var S, last = null, mode = 'pin', anchor = null;
+
+  function blank() {
+    return {
+      days: 28, parts: 4, rule14: true, win: 'any', wFrom: Y + '-06-01', wTo: Y + '-08-31', strict: false,
+      from: Y + '-01-01', to: Y + '-12-31', pinned: [], blocked: [], regional: [], salary: 0
+    };
+  }
+  var PRESETS = {
+    best: blank,
+    summer: function () { var s = blank(); s.win = 'summer'; return s; },
+    strict: function () { var s = blank(); s.strict = true; s.parts = 3; return s; },
+    north: function () { var s = blank(); s.days = 52; s.parts = 5; s.win = 'summer'; return s; }
+  };
+
+  // --- Формат ---
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function plural(n, a, b, c) {
+    var m10 = n % 10, m100 = n % 100;
+    if (m10 === 1 && m100 !== 11) return a;
+    if (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20)) return b;
+    return c;
+  }
+  function days(n) { return n + ' ' + plural(n, 'день', 'дня', 'дней'); }
+  function calDays(n) { return n + ' ' + plural(n, 'календарный день', 'календарных дня', 'календарных дней'); }
+  function fd(n) { var t = C.date(n); return t.d + ' ' + MON[t.m - 1] + (t.y !== Y ? ' ' + t.y : ''); }
+  function fr(a, b) {
+    if (a === b) return fd(a);
+    var x = C.date(a), y = C.date(b);
+    if (x.y === y.y && x.m === y.m) return x.d + '–' + fd(b);
+    return fd(a) + ' – ' + fd(b);
+  }
+  function dmy(n) { var t = C.date(n); return pad(t.d) + '.' + pad(t.m) + '.' + t.y; }
+  function rub(n) { return nf.format(Math.round(n)) + ' ₽'; }
+  function dec1(x) { return String(Math.round(x * 10) / 10).replace('.', ','); }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (ch) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch];
+    });
+  }
+  function parseNum(s) {
+    var v = parseFloat(String(s).replace(/\s/g, '').replace(',', '.'));
+    return isFinite(v) ? v : 0;
+  }
+
+  // --- Ввод для ядра ---
+  function valid(s) { var n = C.parse(s); return n === n; }
+  function windowOf() {
+    if (S.win === 'summer') return { from: Y + '-06-01', to: Y + '-08-31' };
+    if (S.win === 'custom') return { from: S.wFrom, to: S.wTo };
+    return null;
+  }
+  function inp(extra) {
+    return Object.assign({
+      year: Y, from: S.from, to: S.to, days: S.days, maxParts: S.parts, rule14: S.rule14, window: windowOf(), strict: S.strict,
+      pinned: S.pinned.filter(function (p) { return valid(p.from) && valid(p.to); }),
+      blocked: S.blocked.filter(function (p) { return valid(p.from); }).map(function (p) { return { from: p.from, to: valid(p.to) ? p.to : p.from }; }),
+      regional: S.regional.filter(valid)
+    }, extra || {});
+  }
+
+  // --- Форма ---
+  function getPath(path) { return path.split('.').reduce(function (o, k) { return o == null ? o : o[k]; }, S); }
+  function setPath(path, val) {
+    var keys = path.split('.'), o = S;
+    for (var i = 0; i < keys.length - 1; i++) o = o[keys[i]];
+    o[keys[keys.length - 1]] = val;
+  }
+  function dateIn(path, label) {
+    var v = getPath(path) || '';
+    return '<input type="date" min="' + Y + '-01-01" max="' + Y + '-12-31" data-path="' + path + '" value="' + esc(v) + '" aria-label="' + esc(label) + '">';
+  }
+  function chk(path, label, help, struct) {
+    return '<label class="chk"><input type="checkbox" data-path="' + path + '" data-kind="bool"' + (struct ? ' data-struct="1"' : '') + (getPath(path) ? ' checked' : '') + '>' +
+      '<span>' + label + (help ? '<span class="help">' + help + '</span>' : '') + '</span></label>';
+  }
+  function segBtn(v, label) {
+    return '<button type="button" data-act="win" data-v="' + v + '" aria-pressed="' + (S.win === v) + '">' + label + '</button>';
+  }
+  function rangeList(list, title, help, addLabel) {
+    var h = '<div class="field"><span class="lbl">' + title + '</span>';
+    S[list].forEach(function (r, i) {
+      h += '<div class="item"><div class="row2">' + dateIn(list + '.' + i + '.from', 'С') + dateIn(list + '.' + i + '.to', 'По') + '</div>';
+      if (list === 'pinned' && valid(r.from) && valid(r.to)) {
+        var a = C.parse(r.from), b = C.parse(r.to), c = C.context(inp());
+        h += '<div class="note">' + days(C.count(c, Math.min(a, b), Math.max(a, b))) + ' отпуска</div>';
+      }
+      h += '<button type="button" class="x" data-act="del" data-list="' + list + '" data-i="' + i + '" aria-label="Удалить">×</button></div>';
+    });
+    h += '<button type="button" class="add" data-act="add" data-list="' + list + '">＋ ' + addLabel + '</button><span class="help">' + help + '</span></div>';
+    return h;
+  }
+
+  function renderForm() {
+    var h = '<fieldset><legend>Отпуск</legend>';
+    h += '<label class="field"><span class="lbl">Дней отпуска на ' + Y + ' год</span>' +
+      '<input type="text" inputmode="numeric" maxlength="2" data-path="days" data-kind="int" value="' + (S.days || '') + '">' +
+      '<span class="help">28 — основной ежегодный отпуск. Прибавьте дополнительные дни (ненормированный день, вредность, Север) и неиспользованные дни прошлых лет. До ' + C.MAX_DAYS + '.</span></label>';
+    h += '<label class="field"><span class="lbl">Частей не больше</span><select data-path="parts" data-kind="int">';
+    for (var k = 1; k <= C.MAX_PARTS; k++) h += '<option value="' + k + '"' + (S.parts === k ? ' selected' : '') + '>' + k + '</option>';
+    h += '</select><span class="help">Делить отпуск на части можно по соглашению с работодателем (ст. 125 ТК РФ).</span></label>';
+    h += chk('rule14', 'Одна часть — не меньше 14 дней подряд',
+      S.days > 0 && S.days < 14 ? 'Дней меньше 14 — правило не применяется.' : 'Этого требует ст. 125 ТК РФ. Снимите отметку, если 14 дней подряд в этом году уже есть вне плана.', true);
+    if (S.rule14 && S.days >= 14) {
+      h += '<div class="field"><span class="lbl">Где взять 14 дней подряд</span><div class="seg" role="group">' +
+        segBtn('any', 'Где выгоднее') + segBtn('summer', 'Летом') + segBtn('custom', 'Свои даты') + '</div>';
+      if (S.win === 'custom') h += '<div class="row2" style="margin-top:8px">' + dateIn('wFrom', 'Длинная часть не раньше') + dateIn('wTo', 'Длинная часть не позже') + '</div><span class="help">Часть из 14 дней и больше целиком попадёт в этот период.</span>';
+      else if (S.win === 'summer') h += '<span class="help">Часть из 14 дней и больше целиком попадёт в июнь–август.</span>';
+      h += '</div>';
+    }
+    h += chk('strict', 'Части захватывают выходные после себя',
+      'Части с понедельника по пятницу дают больше отдыха, но работодатель может на них не согласиться. С отметкой каждая часть заканчивается в воскресенье или перед рабочим днём.');
+    h += '</fieldset>';
+
+    h += '<fieldset><legend>Ограничения</legend>';
+    h += '<div class="field"><span class="lbl">Период планирования</span><div class="row2">' + dateIn('from', 'Начало периода') + dateIn('to', 'Конец периода') + '</div>' +
+      '<span class="help">Сузьте, если выходите на работу не с января или планируете увольнение.</span></div>';
+    h += rangeList('pinned', 'Закреплённые части', 'Эти даты останутся в плане, остальные дни калькулятор подберёт вокруг них.', 'Закрепить даты');
+    h += rangeList('blocked', 'Когда уйти нельзя', 'Отчёты, высокий сезон, дни, когда в отпуске коллеги.', 'Добавить период');
+    h += '<div class="field"><span class="lbl">Праздники региона</span>';
+    S.regional.forEach(function (r, i) {
+      h += '<div class="item">' + dateIn('regional.' + i, 'Праздник региона') + '<button type="button" class="x" data-act="del" data-list="regional" data-i="' + i + '" aria-label="Удалить">×</button></div>';
+    });
+    h += '<button type="button" class="add" data-act="add" data-list="regional">＋ Добавить праздник</button>' +
+      '<span class="help">Нерабочие праздники по закону региона, например в Татарстане или Башкортостане. В отпуск они не входят.</span></div>';
+    h += '<p class="help">Даты удобнее отмечать прямо в календаре: выберите режим над календарём и щёлкните первый и последний день.</p>';
+    h += '</fieldset>';
+
+    h += '<fieldset><legend>Деньги<span class="opt">необязательно</span></legend>';
+    h += '<label class="field"><span class="lbl">Оклад в месяц, ₽</span>' +
+      '<input type="text" inputmode="numeric" data-path="salary" data-kind="money" placeholder="например, 80 000" value="' + (S.salary ? nf.format(S.salary) : '') + '">' +
+      '<span class="help">Покажем отпускные и сколько зарплаты не начислят за рабочие дни отпуска. Считаем, что последние 12 месяцев оклад был таким же.</span></label>';
+    h += '</fieldset>';
+    form.innerHTML = h;
+  }
+
+  // --- Результат ---
+  function errorText(r) {
+    var p = r.pin ? fr(r.pin.from, r.pin.to) : '';
+    switch (r.reason) {
+      case 'range': return 'Проверьте период планирования: начало позже конца.';
+      case 'pinOut': return 'Закреплённая часть ' + p + ' выходит за период планирования.';
+      case 'pinTouch': return 'Закреплённые части пересекаются или идут подряд (' + p + '). Объедините их в одну.';
+      case 'pinEmpty': return 'В закреплённой части ' + p + ' только праздники — в ней нет ни одного дня отпуска.';
+      case 'pinDays': return 'В закреплённых частях ' + days(r.pinDays) + ' отпуска — больше, чем всего дней (' + r.need + ').';
+      case 'pinParts': return 'Закреплённых частей ' + r.pins + ', а частей разрешено не больше ' + r.maxParts + '.';
+      default: return 'С такими ограничениями план составить не получилось. Ослабьте их: добавьте частей, расширьте период или уберите запреты.';
+    }
+  }
+
+  function holidaysIn(c, p) {
+    var out = [];
+    for (var n = p.from; n <= p.to; n++) if (c.t(n) === 'H') out.push(n);
+    if (!out.length) return '';
+    if (out.length > 2) return fr(out[0], out[out.length - 1]);
+    return out.map(fd).join(' и ');
+  }
+
+  function verdictHtml(r) {
+    var extra = r.rest - r.used;
+    return '<div class="verdict"><h2>' + days(r.used) + ' отпуска — ' + days(r.rest) + ' отдыха</h2>' +
+      '<p>Выходные и праздники добавляют к отпуску ещё ' + days(extra) + ': в среднем ' + dec1(r.rest / r.used) + ' дня отдыха на каждый день отпуска.</p>' +
+      '<p>' + r.parts.length + ' ' + plural(r.parts.length, 'часть', 'части', 'частей') + ': ' +
+      r.parts.map(function (p) { return fr(p.from, p.to); }).join(', ') + '.</p></div>';
+  }
+
+  function planHtml(r) {
+    var c = C.context(inp()), h = '<div class="box"><h3>План по частям</h3>', warns = [];
+    if (r.used < r.need) warns.push('Удалось распределить ' + days(r.used) + ' из ' + r.need + '. Чтобы уложить все дни, разрешите больше частей, расширьте период или уберите запреты.');
+    if (r.no14) warns.push('Не получилось выделить 14 дней подряд' + (windowOf() ? ' в выбранный период' : '') + '. Расширьте период для длинной части или уберите запреты.');
+    if (warns.length) h += '<ul class="warns"><li>' + warns.join('</li><li>') + '</li></ul>';
+    r.parts.forEach(function (p, i) {
+      var shared = r.parts.filter(function (q, j) { return j !== i && q.rest === p.rest; }).map(function (q) { return r.parts.indexOf(q) + 1; });
+      var hol = holidaysIn(c, p), notes = [];
+      notes.push('Отдых ' + fr(p.rest.from, p.rest.to) + ': ' + days(p.rest.len) + (shared.length ? ', вместе с частью ' + shared.join(' и ') : '') + '.');
+      if (hol) notes.push((p.holidays > 1 ? 'Праздники ' : 'Праздник ') + hol + ' в отпуск не ' + (p.holidays > 1 ? 'входят' : 'входит') + ' и продлевает его.');
+      if (!p.weekends && !p.pinned) notes.push('Только рабочие дни: работодатель вправе не согласиться на такую часть.');
+      if (!C.known(C.date(p.rest.to).y)) notes.push('Переносы выходных на ' + C.date(p.rest.to).y + ' год ещё не утверждены — отдых может оказаться длиннее.');
+      h += '<div class="part' + (p.pinned ? ' pinned' : '') + '"><span class="pn">' + (i + 1) + '</span><div>' +
+        '<div class="pt"><b>' + fr(p.from, p.to) + '</b> <span class="tag acc">' + days(p.days) + ' отпуска</span>' +
+        (p.long ? '<span class="tag">14+ дней подряд</span>' : '') + (p.pinned ? '<span class="tag">закреплена</span>' : '') + '</div>' +
+        '<div class="small">' + notes.join(' ') + '</div></div>' +
+        '<button type="button" class="pinb" data-act="pin" data-i="' + i + '">' + (p.pinned ? 'Открепить' : 'Закрепить') + '</button></div>';
+    });
+    h += '<p class="small" style="margin-top:8px">Закрепите удачные части и меняйте настройки — остальные дни калькулятор подберёт заново.</p></div>';
+    return h;
+  }
+
+  function dayTitle(c, n, t, mk, part, rest) {
+    var dt = C.date(n), s = dt.d + ' ' + MON[dt.m - 1] + ', ' + WD[dt.wd] + ' — ';
+    if (t === 'H') s += c.regional[n] ? 'праздник региона, в отпуск не входит' : 'праздник, в отпуск не входит';
+    else if (t === 'O') s += mk === 'moved' ? 'перенесённый выходной, в отпуск входит' : 'выходной';
+    else s += mk === 'work' ? 'рабочая суббота (перенос)' : 'рабочий день';
+    if (part) s += ' · ' + (t === 'H' ? 'внутри части ' : 'отпуск, часть ') + part;
+    else if (rest) s += ' · отдых';
+    if (c.blocked(n)) s += ' · нельзя в отпуск';
+    return s;
+  }
+
+  function calendarHtml(r) {
+    var c = C.context(inp()), part = {}, rest = {}, pin = {};
+    if (r) {
+      r.parts.forEach(function (p, i) { for (var n = p.from; n <= p.to; n++) { part[n] = i + 1; if (p.pinned) pin[n] = true; } });
+      r.blocks.forEach(function (b) { for (var n = b.from; n <= b.to; n++) rest[n] = true; });
+    }
+    var hints = {
+      pin: 'Щёлкните первый и последний день части — она войдёт в план. Щелчок по закреплённой части открепляет её.',
+      block: 'Отметьте период, когда уйти в отпуск нельзя: первый и последний день. Повторная отметка снимает запрет.',
+      reg: 'Отметьте нерабочие праздники своего региона: как и федеральные, они в отпуск не входят. Повторная отметка снимает их.'
+    };
+    var modeBtn = function (m, label, title) { return '<button type="button" data-mode="' + m + '" aria-pressed="' + (mode === m) + '" title="' + title + '">' + label + '</button>'; };
+    var h = '<div class="box"><div class="box-h"><h3>Календарь ' + Y + '</h3><div class="seg cal-tools" role="group" aria-label="Что отмечать">' +
+      modeBtn('pin', 'Закрепить', 'Закрепить часть отпуска') + modeBtn('block', 'Нельзя', 'Отметить, когда уйти в отпуск нельзя') + modeBtn('reg', 'Праздник', 'Отметить праздник региона') + '</div></div>';
+    h += '<p class="small hint">' + (anchor !== null ? 'Начало — ' + fd(anchor) + '. Теперь щёлкните последний день (тот же день, если он один). Esc — отмена.' : hints[mode]) + '</p>';
+    h += '<div class="legend"><span><i class="d vac">5</i>отпуск</span><span><i class="d vac pin">5</i>закреплено</span><span><i class="d rest">6</i>отдых вокруг</span>' +
+      '<span><i class="d h">8</i>праздник, не входит в отпуск</span><span><i class="d o mv">3</i>перенесённый выходной, входит</span>' +
+      '<span><i class="d ws">20</i>рабочая суббота</span><span><i class="d blk"></i>нельзя в отпуск</span></div><div class="months">';
+    for (var m = 1; m <= 12; m++) {
+      var a = C.day(Y, m, 1), b = C.day(Y, m + 1, 1) - 1, work = 0, cells = '';
+      for (var k = 0; k < C.date(a).wd; k++) cells += '<span></span>';
+      for (var n = a; n <= b; n++) {
+        var t = c.t(n), mk = C.mark(n), cls = ['d'];
+        if (t === 'W') { work++; if (mk === 'work') cls.push('ws'); } else cls.push(t === 'H' ? 'h' : 'o');
+        if (mk === 'moved') cls.push('mv');
+        if (part[n] && t !== 'H') cls.push(pin[n] ? 'vac pin' : 'vac');
+        else if (rest[n]) cls.push('rest');
+        if (c.blocked(n)) cls.push('blk');
+        if (n < c.from || n > c.to) cls.push('out');
+        if (anchor === n) cls.push('anc');
+        cells += '<button type="button" class="' + cls.join(' ') + '" data-n="' + n + '" title="' + esc(dayTitle(c, n, t, mk, part[n], rest[n])) + '">' + C.date(n).d + '</button>';
+      }
+      h += '<div class="month"><h4>' + MONTH[m - 1] + '<small>' + work + ' раб. дн.' + '</small></h4><div class="mgrid">' +
+        WD.map(function (w) { return '<span class="wd">' + w + '</span>'; }).join('') + cells + '</div></div>';
+    }
+    return h + '</div></div>';
+  }
+
+  function runName(c, run) {
+    for (var n = run.from; n <= run.to; n++) {
+      if (c.t(n) !== 'H') continue;
+      var dt = C.date(n);
+      if (c.regional[n]) return 'Праздник региона';
+      if (dt.m === 1) return 'Новогодние каникулы' + (dt.y !== Y ? ' ' + dt.y : '');
+      var name = HOLIDAY_NAME[pad(dt.m) + '-' + pad(dt.d)];
+      if (name) return name;
+    }
+    return 'Длинные выходные';
+  }
+
+  function bridgesHtml(r) {
+    var c = C.context(inp()), runs = C.bridges(inp()), inPlan = {}, pinned = {};
+    if (r) r.parts.forEach(function (p) { inPlan[p.from + ':' + p.to] = true; if (p.pinned) pinned[p.from + ':' + p.to] = true; });
+    var h = '<div class="box"><h3>Длинные выходные ' + Y + ' и как их продлить</h3>' +
+      '<p class="small">Рабочая неделя до или после праздников. «В план» закрепляет эти даты, остальные дни калькулятор подберёт заново.</p><div class="runs">';
+    runs.forEach(function (run) {
+      h += '<div class="run"><div class="run-h"><b>' + fr(run.from, run.to) + '</b><span>' + runName(c, run) + ', ' + days(run.len) + '</span></div>';
+      if (!run.options.length) h += '<div class="opt small">Продлить внутри периода планирования не получится.</div>';
+      run.options.forEach(function (o) {
+        var key = o.from + ':' + o.to;
+        var btn = pinned[key] ? '<button type="button" disabled>Закреплено</button>' :
+          '<button type="button" data-act="addPin" data-a="' + o.from + '" data-b="' + o.to + '">' + (inPlan[key] ? 'Закрепить' : 'В план') + '</button>';
+        h += '<div class="opt"><div><b>' + fr(o.from, o.to) + '</b> — ' + days(o.days) + ' отпуска' + (o.side === 'bridge' ? ', мост между праздниками' : '') +
+          '<br><span class="small">отдых ' + fr(o.rest.from, o.rest.to) + ', <b>' + days(o.rest.len) + '</b>' + (inPlan[key] ? ' · уже в плане' : '') + '</span></div>' + btn + '</div>';
+      });
+      h += '</div>';
+    });
+    return h + '</div></div>';
+  }
+
+  function signed(x) { return (x >= 0 ? '+' : '−') + rub(Math.abs(x)); }
+
+  function moneyHtml(r) {
+    var base = inp(), m = C.money(base, r.parts, S.salary), work = 0;
+    r.parts.forEach(function (p) { work += p.work; });
+    var h = '<div class="box"><h3>Деньги</h3><table class="money">' +
+      '<tr><td>Отпускные за ' + days(r.used) + '</td><td>' + rub(m.pay) + '</td></tr>' +
+      '<tr><td>Зарплата, которую не начислят за ' + work + ' ' + plural(work, 'рабочий день', 'рабочих дня', 'рабочих дней') + ' в отпуске</td><td>−' + rub(m.lost) + '</td></tr>' +
+      '<tr class="sum"><td>Разница с зарплатой, если бы вы эти дни работали</td><td>' + signed(m.diff) + '</td></tr></table>' +
+      '<p class="small">День отпуска оплачивается по среднему заработку: оклад / 29,3 = ' + rub(m.avg) + ' за каждый календарный день, включая выходные. ' +
+      'Рабочий день стоит оклад / число рабочих дней месяца — около ' + rub(S.salary / 21) + '. Поэтому чем больше рабочих дней в отпуске, тем больше отдыха и тем меньше денег. Суммы до вычета НДФЛ.</p>';
+    var alt = C.optimize(inp({ strict: !S.strict }));
+    if (alt.ok && alt.used === r.used && !alt.no14 && alt.rest !== r.rest) {
+      var ma = C.money(base, alt.parts, S.salary);
+      h += '<p>' + (S.strict ? 'Если брать части без выходных' : 'Если в каждую часть включать выходные после неё') + ': ' +
+        days(alt.rest) + ' отдыха вместо ' + r.rest + ', итог по деньгам ' + signed(ma.diff) + ' вместо ' + signed(m.diff) + '.</p>';
+    }
+    return h + '</div>';
+  }
+
+  function rulesHtml() {
+    return '<div class="box"><h3>Что важно знать</h3><ul class="rules">' +
+      '<li><b>Праздники в отпуск не входят.</b> 1–8 января, 23 февраля, 8 марта, 1 и 9 мая, 12 июня и 4 ноября продлевают отпуск (ст. 120 ТК РФ). Перенесённые выходные — 22 февраля, 3 и 10 мая, 14 июня, 5 ноября и 31 декабря — входят в отпуск как обычные выходные.</li>' +
+      '<li><b>Делить отпуск можно по соглашению с работодателем</b>, и одна из частей должна быть не меньше 14 календарных дней (ст. 125 ТК РФ). Работодатель не может разделить отпуск без вашего согласия, но и не обязан соглашаться на ваш вариант.</li>' +
+      '<li><b>Части только из рабочих дней</b> закон не запрещает: Роструд считает их допустимыми, если работник и работодатель договорились. Отпуск только на выходные не допускается — в каждой части должен быть рабочий день.</li>' +
+      '<li><b>Сроки.</b> График отпусков на ' + Y + ' год утверждают не позднее 17 декабря ' + (Y - 1) + ' года (ст. 123 ТК РФ). О начале отпуска предупреждают не позже чем за две недели, отпускные платят не позже чем за три дня до него (ст. 136 ТК РФ).</li>' +
+      '<li><b>На стыке лет</b> учтены выходной 31 декабря ' + (Y - 1) + ' года и праздники 1–8 января ' + (Y + 1) + ' года. Переносы выходных на ' + (Y + 1) + ' год ещё не утверждены.</li>' +
+      '<li><b>Не учтены</b> шестидневная неделя и сменный график: календарь рассчитан на пятидневку.</li>' +
+      '</ul></div>';
+  }
+
+  function render(reuse) {
+    if (!reuse) {
+      save();
+      last = C.optimize(inp());
+    }
+    var r = last, ok = r.ok && r.parts.length > 0, h = '';
+    if (!r.ok) h += '<div class="verdict bad"><h2>План не составлен</h2><p>' + errorText(r) + '</p></div>';
+    else if (!ok) h += '<div class="verdict neutral"><h2>Сколько у вас дней отпуска?</h2><p>Укажите число дней слева — калькулятор подберёт даты.</p></div>';
+    else h += verdictHtml(r) + planHtml(r);
+    h += calendarHtml(r.ok ? r : null);
+    h += bridgesHtml(r.ok ? r : null);
+    if (ok && S.salary > 0) h += moneyHtml(r);
+    h += rulesHtml();
+    if (ok) h += '<div class="actions"><button type="button" data-act="ics">Скачать в календарь (.ics)</button><button type="button" data-act="text">Скопировать заявление</button>' +
+      '<button type="button" data-act="link">Скопировать ссылку с данными</button><button type="button" data-act="print">Печать / PDF</button><span class="toast" id="toast"></span></div>';
+    resultsEl.innerHTML = h;
+    if (!reuse) document.getElementById('live').textContent = ok ? days(r.used) + ' отпуска — ' + days(r.rest) + ' отдыха' : '';
+  }
+
+  var timer = null;
+  function schedule() { clearTimeout(timer); timer = setTimeout(render, 200); }
+
+  // --- Тексты и файлы ---
+  function summaryText(r) {
+    var lines = ['План отпуска на ' + Y + ' год: ' + days(r.used) + ' отпуска, ' + days(r.rest) + ' отдыха вместе с выходными и праздниками.', ''];
+    r.parts.forEach(function (p, i) {
+      lines.push((i + 1) + ') с ' + dmy(p.from) + ' по ' + dmy(p.to) + ' — ' + calDays(p.days) + '; отдых с ' + dmy(p.rest.from) + ' по ' + dmy(p.rest.to) + ' (' + days(p.rest.len) + ')');
+    });
+    lines.push('', 'Текст заявления:');
+    if (r.parts.length === 1) {
+      var p = r.parts[0];
+      lines.push('Прошу при составлении графика отпусков на ' + Y + ' год предусмотреть мне ежегодный оплачиваемый отпуск с ' + dmy(p.from) + ' по ' + dmy(p.to) + ' продолжительностью ' + calDays(p.days) + '.');
+    } else {
+      lines.push('Прошу при составлении графика отпусков на ' + Y + ' год предусмотреть мне ежегодный оплачиваемый отпуск, разделённый на части (ст. 125 ТК РФ):');
+      r.parts.forEach(function (p, i) {
+        lines.push('— с ' + dmy(p.from) + ' по ' + dmy(p.to) + ' — ' + calDays(p.days) + (i === r.parts.length - 1 ? '.' : ';'));
+      });
+    }
+    if (r.parts.some(function (p) { return p.holidays; })) lines.push('Нерабочие праздничные дни, приходящиеся на период отпуска, в число календарных дней отпуска не включены (ст. 120 ТК РФ).');
+    return lines.join('\n');
+  }
+
+  function icsLine(s) {
+    var out = '', bytes = 0;
+    for (var i = 0; i < s.length; i++) {
+      var ch = s.charAt(i), code = s.charCodeAt(i), b = code < 0x80 ? 1 : code < 0x800 ? 2 : 3;
+      if (bytes + b > 73) { out += '\r\n '; bytes = 1; }
+      out += ch;
+      bytes += b;
+    }
+    return out;
+  }
+  function icsText(s) { return s.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n'); }
+  function icsFile(r) {
+    var stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+    var compact = function (n) { return C.iso(n).replace(/-/g, ''); };
+    var lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//kireev-duty//vygodnyy-otpusk//RU', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
+    r.parts.forEach(function (p, i) {
+      lines.push('BEGIN:VEVENT', 'UID:otpusk-' + compact(p.from) + '-' + (i + 1) + '@kireev-duty.github.io', 'DTSTAMP:' + stamp,
+        'DTSTART;VALUE=DATE:' + compact(p.from), 'DTEND;VALUE=DATE:' + compact(p.to + 1),
+        'SUMMARY:' + icsText('Отпуск, ' + days(p.days)),
+        'DESCRIPTION:' + icsText('Отдых с ' + dmy(p.rest.from) + ' по ' + dmy(p.rest.to) + ' — ' + days(p.rest.len)),
+        'TRANSP:TRANSPARENT', 'END:VEVENT');
+    });
+    lines.push('END:VCALENDAR');
+    return lines.map(icsLine).join('\r\n') + '\r\n';
+  }
+  function download(name, text, type) {
+    var url = URL.createObjectURL(new Blob([text], { type: type }));
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 0);
+  }
+
+  // --- Отметки в календаре ---
+  function ranges(list) {
+    return list.filter(function (r) { return valid(r.from); }).map(function (r) {
+      var a = C.parse(r.from), b = valid(r.to) ? C.parse(r.to) : a;
+      return [Math.min(a, b), Math.max(a, b)];
+    });
+  }
+  function toList(rs) { return rs.map(function (r) { return { from: C.iso(r[0]), to: C.iso(r[1]) }; }); }
+  function addPin(a, b) {
+    var keep = ranges(S.pinned).filter(function (r) { return r[1] < a - 1 || r[0] > b + 1; });
+    keep.push([a, b]);
+    keep.sort(function (x, y) { return x[0] - y[0]; });
+    S.pinned = toList(keep);
+  }
+  function toggleBlocked(a, b) {
+    var rs = ranges(S.blocked), all = true;
+    for (var n = a; n <= b && all; n++) all = rs.some(function (r) { return n >= r[0] && n <= r[1]; });
+    var out = [];
+    rs.forEach(function (r) {
+      if (r[1] < a || r[0] > b) out.push(r);
+      else {
+        if (r[0] < a) out.push([r[0], a - 1]);
+        if (r[1] > b) out.push([b + 1, r[1]]);
+      }
+    });
+    if (!all) out.push([a, b]);
+    out.sort(function (x, y) { return x[0] - y[0]; });
+    var merged = [];
+    out.forEach(function (r) {
+      var l = merged[merged.length - 1];
+      if (l && r[0] <= l[1] + 1) l[1] = Math.max(l[1], r[1]);
+      else merged.push(r.slice());
+    });
+    S.blocked = toList(merged);
+  }
+  function toggleRegional(a, b) {
+    var set = {}, all = true, n;
+    S.regional.forEach(function (s) { if (valid(s)) set[C.parse(s)] = true; });
+    for (n = a; n <= b; n++) if (!set[n]) all = false;
+    for (n = a; n <= b; n++) { if (all) delete set[n]; else set[n] = true; }
+    S.regional = Object.keys(set).map(Number).sort(function (x, y) { return x - y; }).map(C.iso);
+  }
+  function onDay(n) {
+    if (anchor === null) {
+      if (mode === 'pin') {
+        var rs = ranges(S.pinned);
+        for (var i = 0; i < rs.length; i++) {
+          if (n >= rs[i][0] && n <= rs[i][1]) {
+            S.pinned = toList(rs.filter(function (r, j) { return j !== i; }));
+            renderForm();
+            render();
+            return;
+          }
+        }
+      }
+      anchor = n;
+      render(true);
+      return;
+    }
+    var a = Math.min(anchor, n), b = Math.max(anchor, n);
+    anchor = null;
+    if (mode === 'pin') addPin(a, b);
+    else if (mode === 'block') toggleBlocked(a, b);
+    else toggleRegional(a, b);
+    renderForm();
+    render();
+  }
+
+  // --- Хранение ---
+  function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) {} }
+  function sane(d) {
+    if (!d || typeof d !== 'object') return null;
+    var s = Object.assign(blank(), d);
+    s.days = Math.max(0, Math.min(C.MAX_DAYS, parseInt(s.days, 10) || 0));
+    s.parts = Math.max(1, Math.min(C.MAX_PARTS, parseInt(s.parts, 10) || 1));
+    s.rule14 = !!s.rule14;
+    s.strict = !!s.strict;
+    if (['any', 'summer', 'custom'].indexOf(s.win) < 0) s.win = 'any';
+    ['from', 'to', 'wFrom', 'wTo'].forEach(function (k) { s[k] = String(s[k] || ''); });
+    ['pinned', 'blocked'].forEach(function (k) {
+      s[k] = (Array.isArray(s[k]) ? s[k] : []).filter(function (x) { return x && typeof x === 'object'; })
+        .map(function (x) { return { from: String(x.from || ''), to: String(x.to || '') }; });
+    });
+    s.regional = (Array.isArray(s.regional) ? s.regional : []).map(String);
+    s.salary = Math.max(0, +s.salary || 0);
+    return s;
+  }
+  function load() {
+    var m = location.hash.match(/^#d=(.+)$/);
+    if (m) {
+      try { var d = sane(JSON.parse(decodeURIComponent(m[1]))); if (d) return d; } catch (e) {}
+    }
+    try { var l = sane(JSON.parse(localStorage.getItem(STORE_KEY))); if (l) return l; } catch (e) {}
+    return blank();
+  }
+
+  function toast(msg) {
+    var el = document.getElementById('toast');
+    if (el) el.textContent = msg;
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+  function copy(text, okMsg) {
+    var done = function () { toast(okMsg); };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); });
+    } else {
+      fallbackCopy(text);
+      done();
+    }
+  }
+
+  // --- События ---
+  function readEl(el) {
+    var k = el.dataset.kind;
+    if (k === 'bool') return el.checked;
+    if (k === 'money') return Math.max(0, Math.round(parseNum(el.value)));
+    if (k === 'int') return parseInt(el.value, 10) || 0;
+    return el.value;
+  }
+
+  form.addEventListener('input', function (ev) {
+    var el = ev.target;
+    if (!el.dataset.path || el.type !== 'text') return;
+    setPath(el.dataset.path, readEl(el));
+    if (el.dataset.path === 'days') S.days = Math.min(C.MAX_DAYS, S.days);
+    schedule();
+  });
+
+  form.addEventListener('change', function (ev) {
+    var el = ev.target;
+    if (!el.dataset.path) return;
+    setPath(el.dataset.path, readEl(el));
+    clearTimeout(timer);
+    if (el.dataset.struct || el.dataset.path === 'days' || /^pinned\./.test(el.dataset.path)) renderForm();
+    else if (el.dataset.kind === 'money' && el.value) el.value = nf.format(readEl(el));
+    render();
+  });
+
+  form.addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-act]');
+    if (!b) return;
+    var act = b.dataset.act, list = b.dataset.list;
+    if (act === 'win') S.win = b.dataset.v;
+    if (act === 'add') S[list].push(list === 'regional' ? '' : { from: '', to: '' });
+    if (act === 'del') S[list].splice(+b.dataset.i, 1);
+    renderForm();
+    render();
+    if (act === 'add') {
+      var inputs = form.querySelectorAll('[data-path^="' + list + '.' + (S[list].length - 1) + '"]');
+      if (inputs[0]) inputs[0].focus();
+    }
+  });
+
+  resultsEl.addEventListener('click', function (ev) {
+    var b = ev.target.closest('button');
+    if (!b) return;
+    if (b.dataset.n) return onDay(+b.dataset.n);
+    if (b.dataset.mode) {
+      mode = b.dataset.mode;
+      anchor = null;
+      return render(true);
+    }
+    var act = b.dataset.act, r = last;
+    if (act === 'pin') {
+      var p = r.parts[+b.dataset.i];
+      if (p.pinned) S.pinned = toList(ranges(S.pinned).filter(function (x) { return !(x[0] === p.from && x[1] === p.to); }));
+      else addPin(p.from, p.to);
+    }
+    if (act === 'addPin') addPin(+b.dataset.a, +b.dataset.b);
+    if (act === 'pin' || act === 'addPin') {
+      renderForm();
+      render();
+      return;
+    }
+    if (act === 'print') window.print();
+    if (act === 'link') copy(location.href.split('#')[0] + '#d=' + encodeURIComponent(JSON.stringify(S)), 'Ссылка скопирована');
+    if (act === 'text') copy(summaryText(r), 'Текст скопирован');
+    if (act === 'ics') { download('otpusk-' + Y + '.ics', icsFile(r), 'text/calendar;charset=utf-8'); toast('Файл скачан'); }
+  });
+
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape' && anchor !== null) {
+      anchor = null;
+      render(true);
+    }
+  });
+
+  document.querySelector('.presets').addEventListener('click', function (ev) {
+    var name = ev.target.dataset.preset;
+    if (!name) return;
+    S = PRESETS[name]();
+    anchor = null;
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    renderForm();
+    render();
+  });
+
+  document.querySelector('footer').addEventListener('click', function (ev) {
+    if (!('themeSet' in ev.target.dataset)) return;
+    var t = ev.target.dataset.themeSet;
+    if (t) document.documentElement.setAttribute('data-theme', t);
+    else document.documentElement.removeAttribute('data-theme');
+    try { localStorage.setItem(STORE_KEY + '-theme', t); } catch (err) {}
+  });
+
+  try {
+    var savedTheme = localStorage.getItem(STORE_KEY + '-theme');
+    if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+  } catch (err) {}
+
+  S = load();
+  renderForm();
+  render();
+})();
+</script>
+</body>
+</html>
